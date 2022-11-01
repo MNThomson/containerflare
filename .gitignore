@@ -1,0 +1,6 @@
+# Env config
+.env
+.secret
+
+# VSCode
+.vscode
