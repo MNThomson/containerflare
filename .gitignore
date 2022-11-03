@@ -7,3 +7,7 @@
 
 # TypeScript
 node_modules/
+
+# Misc
+NOTES.md
+data

@@ -1,3 +1,13 @@
 name = "containerflare"
 main = "src/index.ts"
 compatibility_date = "2022-11-01"
+
+[[r2_buckets]]
+binding = 'containerFlareR2'
+bucket_name = 'containerFlareR2'
+preview_bucket_name = 'containerFlareR2Preview'
+
+[[kv_namespaces]]
+binding = "containerFlareKV"
+id = "4de2efd1fe9e41c88019efcd5c6d7577"
+preview_id = "4de2efd1fe9e41c88019efcd5c6d7577"
