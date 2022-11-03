@@ -5,6 +5,7 @@ async function seedDB(env: Env) {
     "hello-world/latest",
     `sha256:e18f0a777aefabe047a671ab3ec3eed05414477c951ab1a6f352a06974245fe7`
   );
+
   await env.containerFlareKV.put(
     "e18f0a777aefabe047a671ab3ec3eed05414477c951ab1a6f352a06974245fe7",
     `{
@@ -23,6 +24,7 @@ async function seedDB(env: Env) {
    "schemaVersion": 2
 }`
   );
+
   await env.containerFlareKV.put(
     "f54a58bc1aac5ea1a25d796ae155dc228b3f0e11d046ae276b39c4bf2f13d8c4",
     `{

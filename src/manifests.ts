@@ -1,9 +1,8 @@
 import { CFRequest, Env } from "./index";
 
 async function manifests(req: CFRequest, env: Env) {
+  // DB Query
   let dbKey = "";
-  let body = "";
-
   if (req.tag.includes("sha256")) {
     dbKey = req.tag.replace("sha256:", "");
   } else {
@@ -17,12 +16,15 @@ async function manifests(req: CFRequest, env: Env) {
     return new Response("{}", { status: 404 });
   }
 
+  // Set body of response
+  let body = "";
   if (req.method !== "HEAD") {
     body = data;
   }
 
   let resp = new Response(body);
 
+  // Set docker-content-digest header
   let shaTag = req.tag;
   if (!req.tag.includes("sha256")) {
     shaTag = data;
@@ -30,6 +32,7 @@ async function manifests(req: CFRequest, env: Env) {
   console.log("SHATag: ", shaTag);
   resp.headers.set("docker-content-digest", shaTag);
 
+  // Set Content-Type header
   let contentType = "";
   if (data.startsWith("{")) {
     contentType = JSON.parse(data)?.mediaType;
