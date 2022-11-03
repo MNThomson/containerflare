@@ -8,10 +8,10 @@ async function manifests(req: CFRequest, env: Env) {
   } else {
     dbKey = req.image + "/" + req.tag;
   }
-  console.log("DBKey: ", dbKey);
+  console.log("DBKey:", dbKey);
 
   let data = await env.containerFlareKV.get(dbKey);
-  console.log("DATA: ", !!data);
+  console.log("DATA:", !!data);
   if (!data) {
     return new Response("{}", { status: 404 });
   }
@@ -29,7 +29,7 @@ async function manifests(req: CFRequest, env: Env) {
   if (!req.tag.includes("sha256")) {
     shaTag = data;
   }
-  console.log("SHATag: ", shaTag);
+  console.log("SHATag:", shaTag);
   resp.headers.set("docker-content-digest", shaTag);
 
   // Set Content-Type header
@@ -40,7 +40,7 @@ async function manifests(req: CFRequest, env: Env) {
   if (!contentType) {
     contentType = "application/vnd.docker.distribution.manifest.list.v2+json";
   }
-  console.log("ContentType: ", contentType);
+  console.log("ContentType:", contentType);
   resp.headers.set("Content-Type", contentType);
 
   return resp;
