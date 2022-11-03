@@ -5,6 +5,7 @@
     "jsx": "react",
     "module": "es2022",
     "moduleResolution": "node",
+    "rootDirs": ["src"],
     "types": ["@cloudflare/workers-types"],
     "resolveJsonModule": true,
     "allowJs": false,
