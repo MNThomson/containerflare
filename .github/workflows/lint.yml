@@ -1,0 +1,28 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup nodejs
+        uses: actions/setup-node@v3
+
+      - name: Initialize npm
+        run: npm ci
+
+      - name: Run Prettier
+        run: npm run prettier:ci

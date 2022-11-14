@@ -12,6 +12,7 @@
     "dev": "wrangler dev --local",
     "deploy": "wrangler publish",
     "lint": "prettier -w .",
+    "prettier:ci": "prettier --check .",
     "pull:local": "docker run 127.0.0.1:8787/hello-world:latest && docker image rm -f 127.0.0.1:8787/hello-world:latest",
     "pull:remote": "docker run hello-world:latest && docker image rm -f hello-world:latest",
     "burp": "sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf && sudo systemctl daemon-reload && sudo systemctl restart docker"
