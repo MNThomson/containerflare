@@ -8,6 +8,7 @@ async function blobs(req: CFRequest, env: Env) {
     return new Response("{}", { status: 404 });
   }
 
+  // let resp = new Response(data.body);
   let resp = new Response(await data.arrayBuffer());
 
   return resp;

@@ -1,13 +1,13 @@
 import { Env } from "./index";
 
+let authHeader: string;
+
 async function getAuth() {
   const resp = await fetch(
     "https://auth.docker.io/token?scope=repository%3Alibrary%2Fhello-world%3Apull&service=registry.docker.io"
   );
-  return "Bearer " + ((await resp.json()) as Record<string, any>).token;
+  return "Bearer " + ((await resp.json()) as Record<string, any>).access_token;
 }
-
-let authHeader = "Bearer ";
 
 async function seedKV(env: Env) {
   await env.containerFlareKV.put(
@@ -95,7 +95,7 @@ async function seedR2(env: Env) {
 
 async function seed(env: Env) {
   console.log("Seeding...");
-  // authHeader = await getAuth();
+  authHeader = await getAuth();
   await Promise.all([seedKV(env), seedR2(env)]);
 }
 

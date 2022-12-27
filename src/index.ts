@@ -38,7 +38,6 @@ export default {
     } else if (req.type === "blobs") {
       return await blobs(req, env);
     } else {
-      console.log("Uh oh...");
       return new Response("Uh oh...", { status: 404 });
     }
   },
