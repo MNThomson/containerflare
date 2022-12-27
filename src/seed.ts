@@ -6,7 +6,9 @@ async function getAuth() {
   const resp = await fetch(
     "https://auth.docker.io/token?scope=repository%3Alibrary%2Fhello-world%3Apull&service=registry.docker.io"
   );
-  return "Bearer " + ((await resp.json()) as Record<string, any>).access_token;
+  return (
+    "Bearer " + ((await resp.json()) as Record<string, string>).access_token
+  );
 }
 
 async function seedKV(env: Env) {
