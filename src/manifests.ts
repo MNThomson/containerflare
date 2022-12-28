@@ -10,6 +10,7 @@ async function manifests(req: CFRequest, env: Env) {
   }
   console.log("DBKey:", dbKey);
 
+  // Potential for readable stream and no waiting
   let data = await env.containerFlareKV.get(dbKey);
   console.log("DATA:", !!data);
   if (!data) {

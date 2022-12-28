@@ -1,6 +1,6 @@
 import manifests from "./manifests";
 import blobs from "./blobs";
-import seedDB from "./seed";
+import seed from "./seed";
 import parseRequest, { MoreRequestData } from "./url";
 
 export interface Env {
@@ -13,6 +13,8 @@ export interface Env {
 
 export type CFRequest = Request & MoreRequestData;
 
+let shouldSeed = true;
+
 export default {
   async fetch(
     request: Request,
@@ -20,7 +22,10 @@ export default {
     ctx: ExecutionContext
   ): Promise<Response> {
     // Seed the dev DB with test data
-    await seedDB(env);
+    if (shouldSeed) {
+      shouldSeed = false;
+      await seed(env);
+    }
 
     // Add additional data to the request
     const req: CFRequest = Object.assign(request.clone(), {
@@ -31,9 +36,8 @@ export default {
     if (req.type === "manifests") {
       return await manifests(req, env);
     } else if (req.type === "blobs") {
-      return await blobs(req);
+      return await blobs(req, env);
     } else {
-      console.log("Uh oh...");
       return new Response("Uh oh...", { status: 404 });
     }
   },
