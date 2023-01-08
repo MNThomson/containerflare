@@ -1,6 +1,7 @@
 name = "containerflare"
 main = "src/index.ts"
 compatibility_date = "2022-11-01"
+usage_model = "unbound"
 
 [[r2_buckets]]
 binding = 'containerFlareR2'
