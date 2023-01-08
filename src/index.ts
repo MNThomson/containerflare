@@ -24,7 +24,7 @@ export default {
     // Seed the dev DB with test data
     if (shouldSeed) {
       shouldSeed = false;
-      await seed(env);
+      await seed(env, "hello-world/latest");
     }
 
     // Add additional data to the request

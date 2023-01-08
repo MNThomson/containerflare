@@ -4,7 +4,7 @@ async function manifests(req: CFRequest, env: Env) {
   // DB Query
   let dbKey = "";
   if (req.tag.includes("sha256")) {
-    dbKey = req.tag.replace("sha256:", "");
+    dbKey = req.tag;
   } else {
     dbKey = req.image + "/" + req.tag;
   }
