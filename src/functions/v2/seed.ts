@@ -9,60 +9,93 @@ async function getAuth() {
   const resp = await fetch(
     "https://auth.docker.io/token?scope=repository%3Alibrary%2Fhello-world%3Apull&service=registry.docker.io"
   );
-  return (
-    "Bearer " + ((await resp.json()) as Record<string, string>).access_token
-  );
+  return "Bearer " + ((await resp.json()) as Record<string, string>).token;
 }
 
-async function seedKV(env: Env) {
-  await env.containerFlareKV.put(
-    "hello-world/latest",
-    `sha256:e18f0a777aefabe047a671ab3ec3eed05414477c951ab1a6f352a06974245fe7`
+async function seedTag(env: Env, tag: string) {
+  // Get hello-world:latest
+  const label_req = await fetch(
+    "https://registry-1.docker.io/v2/library/hello-world/manifests/latest",
+    {
+      method: "HEAD",
+      headers: {
+        Authorization: authHeader,
+        Accept: "application/vnd.docker.distribution.manifest.list.v2+json",
+      },
+    }
   );
 
-  await env.containerFlareKV.put(
-    "e18f0a777aefabe047a671ab3ec3eed05414477c951ab1a6f352a06974245fe7",
-    `{
-   "manifests": [
-      {
-         "digest": "sha256:f54a58bc1aac5ea1a25d796ae155dc228b3f0e11d046ae276b39c4bf2f13d8c4",
-         "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-         "platform": {
-            "architecture": "amd64",
-            "os": "linux"
-         },
-         "size": 525
-      }
-   ],
-   "mediaType": "application/vnd.docker.distribution.manifest.list.v2+json",
-   "schemaVersion": 2
-}`
-  );
+  if (label_req.status != 200) {
+    console.error("Tag does not exist", label_req.statusText);
+    return;
+  }
 
-  await env.containerFlareKV.put(
-    "f54a58bc1aac5ea1a25d796ae155dc228b3f0e11d046ae276b39c4bf2f13d8c4",
-    `{
-   "schemaVersion": 2,
-   "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-   "config": {
-      "mediaType": "application/vnd.docker.container.image.v1+json",
-      "size": 1469,
-      "digest": "sha256:feb5d9fea6a5e9606aa995e879d862b825965ba48de054caab5ef356dc6b3412"
-   },
-   "layers": [
-      {
-         "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
-         "size": 2479,
-         "digest": "sha256:2db29710123e3e53a794f2694094b9b4338aa9ee5c40b930cb8063a1be392c54"
-      }
-   ]
-}`
-  );
+  console.log(await label_req.text());
+
+  const sha_hash = await label_req.headers.get("docker-content-digest")!;
+  await env.containerFlareKV.put(tag, sha_hash);
+  console.log(sha_hash);
+  seedOS(env, sha_hash);
 }
 
-async function seedR2(env: Env) {
+async function seedOS(env: Env, hash: string) {
+  // Get sha256:
+  const label_req = await fetch(
+    `https://registry-1.docker.io/v2/library/hello-world/manifests/${hash}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: authHeader,
+        Accept: "application/vnd.docker.distribution.manifest.list.v2+json",
+      },
+    }
+  );
+
+  if (label_req.status != 200) {
+    console.error("OS list does not exist", label_req.statusText);
+    return;
+  }
+
+  const os_list = await label_req.text();
+  await env.containerFlareKV.put(hash, os_list);
+  const os_json = JSON.parse(os_list) as Record<any, any>;
+
+  for (var key in os_json.manifests) {
+    seedImage(env, os_json.manifests[key].digest);
+  }
+}
+
+async function seedImage(env: Env, hash: string) {
+  // Get sha256:
+  const label_req = await fetch(
+    `https://registry-1.docker.io/v2/library/hello-world/manifests/${hash}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: authHeader,
+        Accept: "application/vnd.docker.distribution.manifest.v2+json",
+      },
+    }
+  );
+
+  if (label_req.status != 200) {
+    console.error("OS list does not exist", label_req.statusText);
+    return;
+  }
+
+  const os_list = await label_req.text();
+  await env.containerFlareKV.put(hash, os_list);
+  const image_json = JSON.parse(os_list) as Record<any, any>;
+
+  seedBlob(env, image_json.config.digest);
+  for (var key in image_json.layers) {
+    seedBlob(env, image_json.layers[key].digest);
+  }
+}
+
+async function seedBlob(env: Env, hash: string) {
   const req = await fetch(
-    "https://registry-1.docker.io/v2/library/hello-world/blobs/sha256:2db29710123e3e53a794f2694094b9b4338aa9ee5c40b930cb8063a1be392c54",
+    `https://registry-1.docker.io/v2/library/hello-world/blobs/${hash}`,
     {
       headers: {
         Authorization: authHeader,
@@ -74,35 +107,14 @@ async function seedR2(env: Env) {
     console.error("Seed not 200", req.statusText);
   }
 
-  await env.containerFlareR2.put(
-    "sha256:2db29710123e3e53a794f2694094b9b4338aa9ee5c40b930cb8063a1be392c54",
-    await req.arrayBuffer()
-  );
-
-  const req2 = await fetch(
-    "https://registry-1.docker.io/v2/library/hello-world/blobs/sha256:feb5d9fea6a5e9606aa995e879d862b825965ba48de054caab5ef356dc6b3412",
-    {
-      headers: {
-        Authorization: authHeader,
-      },
-    }
-  );
-
-  await env.containerFlareR2.put(
-    "sha256:feb5d9fea6a5e9606aa995e879d862b825965ba48de054caab5ef356dc6b3412",
-    await req2.arrayBuffer()
-  );
+  await env.containerFlareR2.put(hash, await req.arrayBuffer());
 }
 
-export const onRequestGet: PagesFunction<Env> = async (
-  context: EventContext<Env, "", Record<string, unknown>>
-) => {
-  if (context.env.ENVIRONMENT !== "development") {
-    return new Response("", { status: 404 });
-  }
-
+async function seed(env: Env, tag: string) {
   console.log("Seeding...");
   authHeader = await getAuth();
-  await Promise.all([seedKV(context.env), seedR2(context.env)]);
-  return new Response("Seeding done");
-};
+  await seedTag(env, tag);
+  console.log("DONE Seeding");
+}
+
+export default seed;
