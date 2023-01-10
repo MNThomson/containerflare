@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker run 172.17.0.1:8787/hello-world:latest
