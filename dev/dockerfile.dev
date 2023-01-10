@@ -1,0 +1,8 @@
+FROM docker:20.10-dind
+
+RUN mkdir -p /etc/docker && echo '{"insecure-registries" : ["172.17.0.1:8787"]}' > /etc/docker/daemon.json && \
+    mkdir -p /etc/default && echo 'DOCKER_OPTS="--config-file=/etc/docker/daemon.json"' > /etc/default/docker
+
+ADD pull /usr/local/bin
+
+CMD ["dockerd-entrypoint.sh"]
