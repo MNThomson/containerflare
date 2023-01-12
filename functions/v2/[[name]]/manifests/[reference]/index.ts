@@ -1,17 +1,34 @@
-import { CFRequest, Env } from "./index";
+import type { PagesFunction, Env, Request } from "@cloudflare/workers-types";
 
-async function manifests(req: CFRequest, env: Env) {
+import { parseParams } from "../../../../../src/utils/url";
+
+interface Env {
+  containerFlareKV: KVNamespace;
+  containerFlareR2: R2Bucket;
+}
+
+type requestParams = "name" | "reference";
+
+export const onRequest: PagesFunction<Env> = async (
+  context: EventContext<Env, requestParams, null>
+) => {
+  const { name, reference, error } = parseParams(context.params);
+  console.log({ name, reference, error });
+  if (error) {
+    return new Response("{}", { status: 404 });
+  }
+
   // DB Query
   let dbKey = "";
-  if (req.tag.includes("sha256")) {
-    dbKey = req.tag.replace("sha256:", "");
+  if (reference.includes("sha256")) {
+    dbKey = reference.replace("sha256:", "");
   } else {
-    dbKey = req.image + "/" + req.tag;
+    dbKey = name + "/" + reference;
   }
   console.log("DBKey:", dbKey);
 
   // Potential for readable stream and no waiting
-  let data = await env.containerFlareKV.get(dbKey);
+  let data = await context.env.containerFlareKV.get(dbKey);
   console.log("DATA:", !!data);
   if (!data) {
     return new Response("{}", { status: 404 });
@@ -26,8 +43,8 @@ async function manifests(req: CFRequest, env: Env) {
   let resp = new Response(body);
 
   // Set docker-content-digest header
-  let shaTag = req.tag;
-  if (!req.tag.includes("sha256")) {
+  let shaTag = reference;
+  if (!reference.includes("sha256")) {
     shaTag = data;
   }
   console.log("SHATag:", shaTag);
@@ -43,8 +60,7 @@ async function manifests(req: CFRequest, env: Env) {
   }
   console.log("ContentType:", contentType);
   resp.headers.set("Content-Type", contentType);
+  resp.headers.set("Content-Length", "2");
 
   return resp;
-}
-
-export default manifests;
+};

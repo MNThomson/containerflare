@@ -1,0 +1,11 @@
+{
+  "paths": {
+    "@utils/*": ["../src/utils/*"]
+  },
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["esnext"],
+    "types": ["@cloudflare/workers-types"]
+  }
+}

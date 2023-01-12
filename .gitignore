@@ -1,12 +1,23 @@
 # Env config
 .env
+.env.production
 .secret
 
-# VSCode
-.vscode
+# build output
+dist/
+.output/
 
-# TypeScript
+# dependencies
 node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# macOS-specific files
+.DS_Store
 
 # Misc
 NOTES.md

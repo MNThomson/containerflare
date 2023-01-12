@@ -1,20 +1,30 @@
 {
   "name": "containerflare",
+  "type": "module",
   "version": "0.0.1",
-  "devDependencies": {
-    "@cloudflare/workers-types": "^3.18.0",
-    "prettier": "2.7.1",
-    "typescript": "^4.8.4",
-    "wrangler": "^2.2.0"
-  },
   "private": true,
   "scripts": {
-    "dev": "wrangler dev --local",
+    "dev:a": "astro dev",
+    "dev:cf": "wrangler pages dev --kv containerflareKV --r2 containerflareR2 -- astro dev #--proxy 3000 --compatibility-date=2023-01-01 ",
+    "build": "astro build",
+    "astro": "astro",
+    "OLD": "---------------------------------------------------------",
+    "dev:old": "wrangler dev --local",
     "deploy": "wrangler publish",
     "lint": "prettier -w .",
     "prettier:ci": "prettier --check .",
-    "pull:local": "docker run 127.0.0.1:8787/hello-world:latest && docker image rm -f 127.0.0.1:8787/hello-world:latest",
+    "pull:local": "docker run 127.0.0.1:8788/hello-world:latest && docker image rm -f 127.0.0.1:8788/hello-world:latest",
     "pull:remote": "docker run hello-world:latest && docker image rm -f hello-world:latest",
     "burp": "sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf && sudo systemctl daemon-reload && sudo systemctl restart docker"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^5.0.0",
+    "astro": "^1.9.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20221111.1",
+    "wrangler": "^2.7.1",
+    "prettier": "2.7.1",
+    "typescript": "^4.8.4"
   }
 }
