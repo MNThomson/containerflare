@@ -8,6 +8,7 @@
     "dev:cf": "( sleep 10 && curl http://localhost:8788/v2/seed ) & wrangler pages dev --compatibility-date=2023-01-12 --kv containerFlareKV --r2 containerFlareR2 -- astro dev #--proxy 3000",
     "preview": "npm run build && rm functions/[[path]].js && wrangler pages dev ./dist",
     "build": "astro build",
+    "publish": "npm run build && npx wrangler pages publish --branch main dist/",
     "astro": "astro",
     "logs:cf": "wrangler pages deployment tail --project-name containerflare --environment preview",
     "OLD": "---------------------------------------------------------",
