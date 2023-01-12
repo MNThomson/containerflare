@@ -36,7 +36,7 @@ export const onRequest: PagesFunction<Env> = async (
 
   // Set body of response
   let body = "";
-  if (req.method !== "HEAD") {
+  if (context.request.method !== "HEAD") {
     body = data;
   }
 

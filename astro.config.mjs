@@ -6,7 +6,7 @@ import cloudflare from "@astrojs/cloudflare";
 // https://github.com/rodneylab/astro-cloudflare
 export default defineConfig({
   // integrations: [preact()],
-  site: `http://astro.build`,
+  site: `https://cfcr.dev`,
   output: "server",
-  adapter: cloudflare(/*{ mode: "directory" }*/),
+  adapter: cloudflare({ mode: "directory" }),
 });
