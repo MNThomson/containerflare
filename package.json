@@ -6,6 +6,7 @@
   "scripts": {
     "dev:a": "astro dev",
     "dev:cf": "wrangler pages dev --kv containerflareKV --r2 containerflareR2 -- astro dev #--proxy 3000 --compatibility-date=2023-01-01 ",
+    "preview": "npm run build && wrangler pages dev ./dist",
     "build": "astro build",
     "astro": "astro",
     "logs:cf": "wrangler pages deployment tail --project-name containerflare --environment preview",

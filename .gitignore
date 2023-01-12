@@ -6,6 +6,7 @@
 # build output
 dist/
 .output/
+functions/\[\[path\]\].js
 
 # dependencies
 node_modules/
