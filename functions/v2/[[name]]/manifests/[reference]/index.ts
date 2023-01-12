@@ -15,7 +15,7 @@ export const onRequest: PagesFunction<Env> = async (
   const { name, reference, error } = parseParams(context.params);
   console.log({ name, reference, error });
   if (error) {
-    return new Response("{}", { status: 404 });
+    return error;
   }
 
   // DB Query
@@ -31,7 +31,14 @@ export const onRequest: PagesFunction<Env> = async (
   let data = await context.env.containerFlareKV.get(dbKey);
   console.log("DATA:", !!data);
   if (!data) {
-    return new Response("{}", { status: 404 });
+    return new Response(
+      `{"errors": [{
+        "code": "123",
+        "message": "No Data",
+        "detail": "No Data"
+      }]}`,
+      { status: 404 }
+    );
   }
 
   // Set body of response
@@ -60,7 +67,7 @@ export const onRequest: PagesFunction<Env> = async (
   }
   console.log("ContentType:", contentType);
   resp.headers.set("Content-Type", contentType);
-  resp.headers.set("Content-Length", "2");
+  resp.headers.set("Content-Length", data.length.toString());
 
   return resp;
 };

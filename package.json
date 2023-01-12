@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "dev:a": "astro dev",
-    "dev:cf": "wrangler pages dev --kv containerflareKV --r2 containerflareR2 -- astro dev #--proxy 3000 --compatibility-date=2023-01-01 ",
-    "preview": "npm run build && wrangler pages dev ./dist",
+    "dev:cf": "( sleep 10 && curl http://localhost:8788/v2/seed ) & wrangler pages dev --compatibility-date=2023-01-12 --kv containerFlareKV --r2 containerFlareR2 -- astro dev #--proxy 3000",
+    "preview": "npm run build && rm functions/[[path]].js && wrangler pages dev ./dist",
     "build": "astro build",
     "astro": "astro",
     "logs:cf": "wrangler pages deployment tail --project-name containerflare --environment preview",

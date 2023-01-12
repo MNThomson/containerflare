@@ -9,7 +9,7 @@ const referenceRegex = new RegExp(
 function parseParams(params: Record<string, string | string[]>): {
   name: string;
   reference: string;
-  error: string;
+  error: Response | null;
 } {
   try {
     const name = (params.name as string[]).join("/");
@@ -26,14 +26,31 @@ function parseParams(params: Record<string, string | string[]>): {
     return {
       name: name,
       reference: reference,
-      error,
+      error:
+        error.length == 0
+          ? null
+          : new Response(
+              `{"errors": [{
+                "code": "123",
+                "message": "Bad Params",
+                "detail": "${error}"
+              }]}`,
+              { status: 404 }
+            ),
     };
   } catch (error) {
     console.log(error);
     return {
       name: "",
       reference: "",
-      error: "Params are invalid",
+      error: new Response(
+        `{"errors": [{
+          "code": "123",
+          "message": "Bad Params",
+          "detail": "Bad Params"
+        }]}`,
+        { status: 404 }
+      ),
     };
   }
 }

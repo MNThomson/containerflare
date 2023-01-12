@@ -97,14 +97,16 @@ async function seedR2(env: Env) {
   );
 
   const output = await env.containerFlareR2.list();
-  console.log("DONE", output);
 }
 
 export const onRequest: PagesFunction<Env> = async (
   context: EventContext<Env, "image", null>
 ) => {
+  if (context.env.CF_Pages) {
+    return new Response("{}", { status: 404 });
+  }
   console.log("Seeding...");
-  // authHeader = await getAuth();
-  // await Promise.all([seedKV(context.env), seedR2(context.env)]);
+  authHeader = await getAuth();
+  await Promise.all([seedKV(context.env), seedR2(context.env)]);
   return new Response("Seeding done");
 };
