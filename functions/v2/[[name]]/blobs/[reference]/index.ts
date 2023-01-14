@@ -1,24 +1,22 @@
-import type { PagesFunction, Env } from "@cloudflare/workers-types";
+import type {
+  EventContext,
+  PagesFunction,
+  Response,
+} from "@cloudflare/workers-types";
 
-import { parseParams } from "../../../../../src/utils/url";
+import type { Env, RequestParams } from "@bindings";
 
-interface Env {
-  containerFlareKV: KVNamespace;
-  containerFlareR2: R2Bucket;
-}
-
-type requestParams = "name" | "reference";
+import { parseParams } from "@utils/url";
 
 export const onRequest: PagesFunction<Env> = async (
-  context: EventContext<Env, requestParams, null>
+  context: EventContext<Env, RequestParams, {}>
 ) => {
-  const { name, reference, error } = parseParams(context.params);
-  console.log({ name, reference, error });
+  const { reference, error } = parseParams(context.params);
   if (error) {
     return error;
   }
 
-  let response = new Response();
+  let response: Response;
 
   // DB Query
   const data = await context.env.containerFlareR2.get(reference);

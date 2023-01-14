@@ -1,9 +1,10 @@
-import type { KVNamespace, R2Bucket } from "@cloudflare/workers-types";
+import type {
+  EventContext,
+  PagesFunction,
+  Response,
+} from "@cloudflare/workers-types";
 
-interface Env {
-  containerFlareKV: KVNamespace;
-  containerFlareR2: R2Bucket;
-}
+import type { Env } from "@bindings";
 
 let authHeader: string;
 
@@ -74,7 +75,6 @@ async function seedR2(env: Env) {
 
   if (req.status != 200) {
     console.error("Seed not 200", req.statusText);
-    return new Response();
   }
 
   await env.containerFlareR2.put(
@@ -95,16 +95,15 @@ async function seedR2(env: Env) {
     "sha256:feb5d9fea6a5e9606aa995e879d862b825965ba48de054caab5ef356dc6b3412",
     await req2.arrayBuffer()
   );
-
-  const output = await env.containerFlareR2.list();
 }
 
-export const onRequest: PagesFunction<Env> = async (
-  context: EventContext<Env, "image", null>
+export const onRequestGet: PagesFunction<Env> = async (
+  context: EventContext<Env, "", {}>
 ) => {
-  if (context.env.CF_Pages) {
-    return new Response("{}", { status: 404 });
+  if (context.env.ENVIRONMENT !== "development") {
+    return new Response("", { status: 404 });
   }
+
   console.log("Seeding...");
   authHeader = await getAuth();
   await Promise.all([seedKV(context.env), seedR2(context.env)]);

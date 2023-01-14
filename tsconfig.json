@@ -1,18 +1,14 @@
 {
-  "include": ["src/**/*"],
-  "exclude": ["functions/**/*"],
   "compilerOptions": {
-    // Enable top-level await, and other modern ESM features.
-    "target": "ESNext",
-    "module": "ESNext",
+    "baseUrl": ".",
+    "paths": {
+      "@utils/*": ["src/utils/*"],
+      "@bindings": ["functions/bindings"]
+    },
     // Enable node-style module resolution, for things like npm package imports.
     "moduleResolution": "node",
-    // Enable JSON imports.
-    "resolveJsonModule": true,
-    // Enable stricter transpilation for better output.
-    "isolatedModules": true,
-    // Astro will directly run your TypeScript code, no transpilation needed.
-    "noEmit": true,
+
+    /* Strictness rules */
     // Enable strict type checking.
     "strict": true,
     // Error when a value import is only used as a type.
@@ -30,6 +26,10 @@
     // Force the usage of the indexed syntax to access fields declared using an index signature.
     "noUncheckedIndexedAccess": true,
     // Report an error when the value `undefined` is given to an optional property that doesn't specify `undefined` as a valid value.
-    "exactOptionalPropertyTypes": true
+    "exactOptionalPropertyTypes": true,
+    // Enable JSON imports.
+    "resolveJsonModule": true,
+    // Enable stricter transpilation for better output.
+    "isolatedModules": true
   }
 }

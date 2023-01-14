@@ -1,35 +1,31 @@
-import type { PagesFunction, Env, Request } from "@cloudflare/workers-types";
+import type {
+  EventContext,
+  PagesFunction,
+  Response,
+} from "@cloudflare/workers-types";
 
-import { parseParams } from "../../../../../src/utils/url";
+import type { Env, RequestParams } from "@bindings";
 
-interface Env {
-  containerFlareKV: KVNamespace;
-  containerFlareR2: R2Bucket;
-}
-
-type requestParams = "name" | "reference";
+import { parseParams } from "@utils/url";
 
 export const onRequest: PagesFunction<Env> = async (
-  context: EventContext<Env, requestParams, null>
+  context: EventContext<Env, RequestParams, {}>
 ) => {
   const { name, reference, error } = parseParams(context.params);
-  console.log({ name, reference, error });
   if (error) {
     return error;
   }
 
   // DB Query
-  let dbKey = "";
+  let dbKey: string;
   if (reference.includes("sha256")) {
     dbKey = reference.replace("sha256:", "");
   } else {
     dbKey = name + "/" + reference;
   }
-  console.log("DBKey:", dbKey);
 
   // Potential for readable stream and no waiting
   let data = await context.env.containerFlareKV.get(dbKey);
-  console.log("DATA:", !!data);
   if (!data) {
     return new Response(
       `{"errors": [{
@@ -54,7 +50,6 @@ export const onRequest: PagesFunction<Env> = async (
   if (!reference.includes("sha256")) {
     shaTag = data;
   }
-  console.log("SHATag:", shaTag);
   resp.headers.set("docker-content-digest", shaTag);
 
   // Set Content-Type header
@@ -65,7 +60,6 @@ export const onRequest: PagesFunction<Env> = async (
   if (!contentType) {
     contentType = "application/vnd.docker.distribution.manifest.list.v2+json";
   }
-  console.log("ContentType:", contentType);
   resp.headers.set("Content-Type", contentType);
   resp.headers.set("Content-Length", data.length.toString());
 
