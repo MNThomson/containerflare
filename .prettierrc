@@ -1,6 +1,6 @@
 {
   "tabWidth": 2,
-  "importOrder": ["@bindings", "@utils", "^[./]"],
+  "importOrder": ["@ftypes", "@utils", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true
 }

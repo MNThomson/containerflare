@@ -4,7 +4,7 @@ import type {
   Response,
 } from "@cloudflare/workers-types";
 
-import type { Env, RequestParams } from "@bindings";
+import type { Env, RequestParams } from "@ftypes";
 
 import { parseParams } from "@utils/url";
 

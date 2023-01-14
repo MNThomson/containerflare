@@ -4,7 +4,7 @@ import type {
   Response,
 } from "@cloudflare/workers-types";
 
-import type { Env } from "@bindings";
+import type { Env } from "@ftypes";
 
 let authHeader: string;
 

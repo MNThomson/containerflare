@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "@utils/*": ["src/utils/*"],
-      "@bindings": ["functions/bindings"]
+      "@ftypes": ["functions/bindings"]
     },
     // Enable node-style module resolution, for things like npm package imports.
     "moduleResolution": "node",
