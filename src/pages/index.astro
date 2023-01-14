@@ -7,9 +7,12 @@ export const prerender = true;
 <Layout title="Containerflare">
   <main>
     <h1><span class="text-gradient">Containerflare</span></h1>
+    <h2 class="text-gradient">
+      The Globally Distributed, Edge Container Registry
+    </h2>
     <p class="instructions">
-      Try it out with <code>docker pull cfcr.dev/hello-world</code><br />
-      Containerflare is <strong>3x</strong> faster than DockerHub!
+      Containerflare is <strong>3x</strong> faster than DockerHub!<br />
+      <code>docker pull cfcr.dev/hello-world</code>
     </p>
   </main>
 </Layout>
@@ -21,9 +24,15 @@ export const prerender = true;
     max-width: 60ch;
   }
   h1 {
-    font-size: 3rem;
+    font-size: 4rem;
     font-weight: 800;
     margin: 0;
+    text-align: center;
+  }
+  h2 {
+    font-size: 1.17rem;
+    font-weight: 300;
+    margin: 0.25rem 0 1rem 0;
     text-align: center;
   }
   .text-gradient {
