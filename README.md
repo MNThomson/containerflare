@@ -27,6 +27,3 @@
 ## About
 
 `containerflare` is currently in early Alpha. Branch `master` is not guaranteed to be stable and breaking changes may be introduced without notice.
-
-time docker pull cfcr.dev/hello-world:latest
-https://coolors.co/f48120-28262b-8cc084-8e3b46-4c86a8
