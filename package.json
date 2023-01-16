@@ -4,10 +4,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev:a": "astro dev",
-    "dev:cf": "( sleep 10 && curl http://localhost:8788/v2/seed ) & wrangler pages dev --compatibility-date=2023-01-12 --kv containerFlareKV --r2 containerFlareR2 --binding $(cat .env) -- astro dev #--proxy 3000",
+    "dev:a": "PUBLIC_GIT_SHA=$(git rev-parse --short HEAD) astro dev",
+    "dev:cf": "( sleep 10 && curl http://localhost:8788/v2/seed ) & PUBLIC_GIT_SHA=$(git rev-parse --short HEAD) wrangler pages dev --compatibility-date=2023-01-12 --kv containerFlareKV --r2 containerFlareR2 --binding $(cat .env) -- astro dev #--proxy 3000",
     "preview": "npm run build && rm functions/[[path]].js && wrangler pages dev dist/ --compatibility-date=2023-01-12 --kv containerFlareKV --r2 containerFlareR2 --binding $(cat .env)",
-    "build": "astro build",
+    "build": "PUBLIC_GIT_SHA=$(git rev-parse --short HEAD) astro build",
     "publish": "npm run build && rm functions/[[path]].js && npx wrangler pages publish --branch main dist/",
     "astro": "astro",
     "--Oberservability": "---------------------------------------------------------",
@@ -17,8 +17,8 @@
     "lint": "prettier -w .",
     "prettier:ci": "prettier --check .",
     "--Test-----------": "---------------------------------------------------------",
-    "pull:local": "docker run 127.0.0.1:8788/hello-world:latest && docker image rm -f 127.0.0.1:8788/hello-world:latest",
-    "pull:remote": "docker run hello-world:latest && docker image rm -f hello-world:latest",
+    "pull:local": "docker pull 127.0.0.1:8788/hello-world:latest && docker image rm -f 127.0.0.1:8788/hello-world:latest",
+    "pull:remote": "docker pull hello-world:latest && docker image rm -f hello-world:latest",
     "burp": "sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf && sudo systemctl daemon-reload && sudo systemctl restart docker"
   },
   "dependencies": {
