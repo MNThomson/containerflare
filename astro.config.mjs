@@ -8,6 +8,7 @@ export default defineConfig({
   // integrations: [preact()],
   experimental: {
     prerender: true,
+    errorOverlay: true,
   },
   site: `https://cfcr.dev`,
   output: "server",
