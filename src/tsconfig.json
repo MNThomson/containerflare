@@ -1,5 +1,6 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../tsconfig.base.json",
+  "exclude": ["./functions"],
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
