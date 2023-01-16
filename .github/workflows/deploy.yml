@@ -31,6 +31,9 @@ jobs:
       - name: Initialize npm
         run: npm ci
 
+      - name: Initialize npm
+        run: npm run build
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
@@ -40,3 +43,11 @@ jobs:
           directory: ./dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           branch: pr-test
+        id: publish
+
+      - name: Outputs
+        run: |
+          echo "ID: ${{ steps.publish.outputs.id }}"
+          echo "URL: ${{ steps.publish.outputs.url }}"
+          echo "Environment: ${{ steps.publish.outputs.environment }}"
+          echo "Alias: ${{ steps.publish.outputs.alias }}"
