@@ -6,6 +6,7 @@ import type {
 
 import type { Env, RequestParams } from "@types/bindings";
 
+import { errorNoData } from "@utils/response";
 import { parseParams } from "@utils/url";
 
 export const onRequest: PagesFunction<Env> = async (
@@ -21,16 +22,7 @@ export const onRequest: PagesFunction<Env> = async (
   // DB Query
   const data = await context.env.containerFlareR2.get(reference);
   if (!data) {
-    response = new Response(
-      `{"errors": [{
-          "code": "123",
-          "message": "No Data",
-          "detail": "No Data"
-        }]}`,
-      {
-        status: 404,
-      }
-    );
+    response = errorNoData();
   } else {
     response = new Response(data.body);
   }
