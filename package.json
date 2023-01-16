@@ -6,9 +6,9 @@
   "scripts": {
     "dev:a": "PUBLIC_GIT_SHA=$(git rev-parse --short HEAD) astro dev",
     "dev:cf": "( sleep 10 && curl http://localhost:8788/v2/seed ) & PUBLIC_GIT_SHA=$(git rev-parse --short HEAD) wrangler pages dev --compatibility-date=2023-01-12 --kv containerFlareKV --r2 containerFlareR2 --binding $(cat .env) -- astro dev #--proxy 3000",
-    "preview": "npm run build && rm functions/[[path]].js && wrangler pages dev dist/ --compatibility-date=2023-01-12 --kv containerFlareKV --r2 containerFlareR2 --binding $(cat .env)",
-    "build": "PUBLIC_GIT_SHA=$(git rev-parse --short HEAD) astro build",
-    "publish": "npm run build && rm functions/[[path]].js && npx wrangler pages publish --branch main dist/",
+    "preview": "npm run build && wrangler pages dev dist/ --compatibility-date=2023-01-12 --kv containerFlareKV --r2 containerFlareR2 --binding $(cat .env)",
+    "build": "PUBLIC_GIT_SHA=$(git rev-parse --short HEAD) astro build && rm functions/[[path]].js",
+    "publish": "npm run build && npx wrangler pages publish --branch main dist/",
     "astro": "astro",
     "--Oberservability": "---------------------------------------------------------",
     "logs:preview": "wrangler pages deployment tail --project-name containerflare --environment preview",
