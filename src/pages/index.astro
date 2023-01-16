@@ -1,0 +1,64 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+export const prerender = true;
+---
+
+<Layout title="Containerflare">
+  <main>
+    <h1><span class="text-gradient">Containerflare</span></h1>
+    <h2 class="text-gradient">
+      The Globally Distributed, Edge Container Registry
+    </h2>
+    <p class="instructions">
+      Containerflare is <strong>3x</strong> faster than DockerHub!<br />
+      <code>docker pull cfcr.dev/hello-world</code>
+    </p>
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1.5rem;
+    max-width: 60ch;
+  }
+  h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin: 0;
+    text-align: center;
+  }
+  h2 {
+    font-size: 1.17rem;
+    font-weight: 300;
+    margin: 0.25rem 0 1rem 0;
+    text-align: center;
+  }
+  .text-gradient {
+    background-image: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
+  .instructions {
+    line-height: 1.6;
+    margin: 1rem 0;
+    border: 1px solid rgba(var(--accent), 25%);
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.4rem;
+  }
+  .instructions code {
+    font-size: 0.875em;
+    font-weight: bold;
+    background: rgba(var(--accent), 12%);
+    color: rgb(var(--accent));
+    border-radius: 4px;
+    padding: 0.3em 0.45em;
+  }
+  .instructions strong {
+    color: rgb(var(--accent));
+  }
+</style>

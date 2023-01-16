@@ -1,0 +1,6 @@
+{
+  "tabWidth": 2,
+  "importOrder": ["@types", "@utils", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}

@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    // Astro will directly run your TypeScript code, no transpilation needed.
+    "noEmit": true
+  }
+}
