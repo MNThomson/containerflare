@@ -19,7 +19,7 @@ jobs:
       pull-requests: write
     environment:
       name: env.env_name
-      url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
+      # url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
     env:
       env_url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
     name: Deploy to Cloudflare Pages
