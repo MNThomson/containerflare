@@ -68,7 +68,7 @@ jobs:
           debug: true
 
       - name: Find PR comment
-        uses: peter-evans/find-comment@v1
+        uses: peter-evans/find-comment@v2
         id: fc
         with:
           issue-number: ${{ github.event.number }}
@@ -76,7 +76,7 @@ jobs:
           body-includes: "preview of this pull request"
 
       - name: Comment on PR
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.number }}
