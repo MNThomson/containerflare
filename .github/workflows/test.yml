@@ -5,7 +5,7 @@ on:
 
 env:
   isPR: github.ref != 'refs/heads/master'
-  env_name: ${{ github.ref != 'refs/heads/master' && 'pr-${{ github.event.number }}' || 'prod' }}
+  env_name: ${{ github.ref != 'refs/heads/master' && 'pr' || 'prod' }}
 
 jobs:
   publish:
