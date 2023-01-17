@@ -12,6 +12,7 @@ jobs:
     permissions:
       contents: read
       deployments: write
+      pull-requests: write
     name: Deploy to Cloudflare Pages
     steps:
       - name: Start deployment
