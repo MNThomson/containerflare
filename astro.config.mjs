@@ -7,6 +7,7 @@ export default defineConfig({
     prerender: true,
     errorOverlay: true,
   },
+  publicDir: "./src/public",
   site: `https://cfcr.dev`,
   output: "server",
   adapter: cloudflare({ mode: "directory" }),
