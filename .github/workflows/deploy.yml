@@ -7,8 +7,8 @@ on:
   pull_request:
 
 env:
-  isPR: ${{ github.ref != 'refs/heads/master' }}
   env_name: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}', 'pr', github.event.number) || 'prod' }}
+  cf_name: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}', 'pr', github.event.number) || 'main' }}
 
 jobs:
   publish:
@@ -19,9 +19,8 @@ jobs:
       pull-requests: write
     environment:
       name: env.env_name
-      url: ${{ env.isPR && steps.publish.outputs.url || 'https://cfcr.dev' }}
+      url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
     env:
-      cf_name: ${{ github.ref != 'refs/heads/master' && env.env_name || 'testmain' }}
       env_url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
     name: Deploy to Cloudflare Pages
     steps:
