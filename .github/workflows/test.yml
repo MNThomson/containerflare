@@ -4,8 +4,8 @@ on:
   pull_request:
 
 env:
-  isPR: github.ref != 'refs/heads/master'
-  env_name: github.ref != 'refs/heads/master' && 'pr' || 'prod'
+  isPR: ${{ github.ref != 'refs/heads/master' }}
+  env_name: ${{ github.ref != 'refs/heads/master' && 'pr' || 'prod' }}
 
 jobs:
   publish:
