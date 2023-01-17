@@ -8,7 +8,7 @@ on:
 
 env:
   isPR: github.ref != 'refs/heads/master'
-  env_name: ${{ env.isPR && 'pr-${{ github.event.number }}'' || 'prod' }}
+  env_name: ${{ env.isPR && 'pr-${{ github.event.number }}' || 'prod' }}
   cf_name: ${{ env.isPR && env_name }} || 'testmain' }}
   env_url: ${{ env.isPR && steps.publish.outputs.url || 'https://cfcr.dev' }}
 
