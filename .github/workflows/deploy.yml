@@ -9,8 +9,8 @@ on:
 env:
   isPR: github.ref != 'refs/heads/master'
   env_name: ${{ github.ref != 'refs/heads/master' && 'pr-${{ github.event.number }}' || 'prod' }}
-  cf_name: ${{ env.isPR && env.env_name }} || 'testmain' }}
-  env_url: ${{ env.isPR && steps.publish.outputs.url || 'https://cfcr.dev' }}
+  cf_name: ${{ github.ref != 'refs/heads/master' && ${{ github.ref != 'refs/heads/master' && 'pr-${{ github.event.number }}' || 'prod' }} }} || 'testmain' }}
+  env_url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
 
 jobs:
   publish:
