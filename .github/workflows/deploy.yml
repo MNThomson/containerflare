@@ -6,6 +6,12 @@ on:
       - master
   pull_request:
 
+env:
+  isPR: github.ref != 'refs/heads/master'
+  env_name: ${{ isPR && pr-${{ github.event.number }} || 'prod' }}
+  cf_name: ${{ isPR && env_name }} || 'testmain' }}
+  env_url: ${{ isPR && steps.publish.outputs.url || 'https://cfcr.dev' }}
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -14,8 +20,8 @@ jobs:
       deployments: write
       pull-requests: write
     environment:
-      name: pr-${{ github.event.number }}
-      url: ${{ steps.publish.outputs.url }}
+      name: env.env_name
+      url: env.env_url
     name: Deploy to Cloudflare Pages
     steps:
       - name: Start deployment
@@ -24,7 +30,7 @@ jobs:
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env: pr-${{ github.event.number }}
+          env: env.env_name
 
       - name: Checkout code
         uses: actions/checkout@v3
@@ -48,7 +54,7 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: containerflare
           directory: ./dist
-          branch: ${{ steps.deployment.outputs.env }}
+          branch: env.cf_name
         id: publish
 
       - name: Outputs
@@ -66,8 +72,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env: ${{ steps.deployment.outputs.env }}
-          env_url: ${{ steps.publish.outputs.url }}
+          env: env.env_name
+          env_url: env.env_url
           debug: true
 
       - name: Find PR comment
@@ -85,7 +91,7 @@ jobs:
           issue-number: ${{ github.event.number }}
           body: |
             A preview of this pull request is ready!
-            See it at https://${{ steps.deployment.outputs.env }}.containerflare.pages.dev
+            See it at ${{ env_url }}
             View the deploy log at https://github.com/MNThomson/containerflare/actions/runs/${{ github.run_id}}
           edit-mode: replace
 
