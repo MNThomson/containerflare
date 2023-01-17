@@ -1,0 +1,28 @@
+name: Test
+
+on:
+  pull_request:
+
+env:
+  isPR: github.ref != 'refs/heads/master'
+  env_name: ${{ github.ref != 'refs/heads/master' && 'pr-${{ github.event.number }}' || 'prod' }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+
+    # environment:
+    #   name: env.env_name
+    #   url: ${{ env.isPR && steps.publish.outputs.url || 'https://cfcr.dev' }}
+
+    # env:
+    #   cf_name: ${{ ${{ env.isPR }} && env.env_name || 'testmain' }}
+    #   env_url: ${{ ${{ env.isPR }} && steps.publish.outputs.url || 'https://cfcr.dev' }}
+
+    name: Test
+    steps:
+      - run: echo "${{ env.env_name }} ${{ env.isPR }}"
