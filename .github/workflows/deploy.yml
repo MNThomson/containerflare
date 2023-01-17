@@ -19,10 +19,10 @@ jobs:
       pull-requests: write
     environment:
       name: env.env_name
-      url: ${{ env.isPR && steps.publish.outputs.url || 'https://cfcr.dev' }}
+      url: ${{ ${{ env.isPR }} && steps.publish.outputs.url || 'https://cfcr.dev' }}
     env:
-      cf_name: ${{ env.isPR && env.env_name || 'testmain' }}
-      env_url: ${{ env.isPR && steps.publish.outputs.url || 'https://cfcr.dev' }}
+      cf_name: ${{ ${{ env.isPR }} && env.env_name || 'testmain' }}
+      env_url: ${{ ${{ env.isPR }} && steps.publish.outputs.url || 'https://cfcr.dev' }}
     name: Deploy to Cloudflare Pages
     steps:
       - name: Start deployment
