@@ -7,8 +7,9 @@ on:
   pull_request:
 
 env:
-  env_name: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}', 'pr', github.event.number) || 'prod' }}
-  cf_name: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}', 'pr', github.event.number) || 'main' }}
+  env_name: ${{ github.ref != 'refs/heads/master' && format('pr-{0}', github.event.number) || 'prod' }}
+  cf_name: ${{ github.ref != 'refs/heads/master' && format('pr-{0}', github.event.number) || 'main' }}
+  env_url: ${{ github.ref != 'refs/heads/master' && format('https://pr-{0}.{1}.pages.dev', github.event.number, 'containerflare') || 'https://cfcr.dev' }}
 
 jobs:
   publish:
@@ -18,8 +19,9 @@ jobs:
       deployments: write
       pull-requests: write
     environment:
-      name: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}', 'pr', github.event.number) || 'prod' }}
-      url: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev') || 'https://cfcr.dev' }}
+      name: ${{ github.ref != 'refs/heads/master' && format('pr-{0}', github.event.number) || 'prod' }}
+      url: ${{ github.ref != 'refs/heads/master' && format('https://pr-{0}.{1}.pages.dev', github.event.number, 'containerflare') || 'https://cfcr.dev' }}
+    if: github.event.pull_request.merged != true && github.event.pull_request.closed != true
     name: Deploy to Cloudflare Pages
     steps:
       - name: Start deployment
@@ -64,5 +66,5 @@ jobs:
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env: ${{ env.env_name }}
-          env_url: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev') || 'https://cfcr.dev' }}
+          env_url: ${{ env.env_url }}
           debug: true
