@@ -19,9 +19,7 @@ jobs:
       pull-requests: write
     environment:
       name: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}', 'pr', github.event.number) || 'prod' }}
-      # url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
-    # env:
-    #   env_url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
+      url: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev' || 'https://cfcr.dev' }}
     name: Deploy to Cloudflare Pages
     steps:
       - name: Start deployment
@@ -57,13 +55,6 @@ jobs:
           branch: env.cf_name
         id: publish
 
-      - name: Outputs
-        run: |
-          echo "ID: ${{ steps.publish.outputs.id }}"
-          echo "URL: ${{ steps.publish.outputs.url }}"
-          echo "Environment: ${{ steps.publish.outputs.environment }}"
-          echo "Alias: ${{ steps.publish.outputs.alias }}"
-
       - name: Update deployment status
         uses: bobheadxi/deployments@v1
         if: always()
@@ -73,7 +64,7 @@ jobs:
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env: ${{ env.env_name }}
-          env_url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
+          env_url: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev' || 'https://cfcr.dev' }}
           debug: true
 
       - name: Find PR comment
@@ -83,6 +74,7 @@ jobs:
           issue-number: ${{ github.event.number }}
           comment-author: "github-actions[bot]"
           body-includes: "preview of this pull request"
+        if: github.event_name == 'pull_request'
 
       - name: Comment on PR
         uses: peter-evans/create-or-update-comment@v2
@@ -91,13 +83,7 @@ jobs:
           issue-number: ${{ github.event.number }}
           body: |
             A preview of this pull request is ready!
-            See it at ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
+            See it at ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev' || 'https://cfcr.dev' }}
             View the deploy log at https://github.com/MNThomson/containerflare/actions/runs/${{ github.run_id}}
           edit-mode: replace
-
-      # - name: Remove deployment
-      #   uses: bobheadxi/deployments@v1.3.0
-      #   with:
-      #     step: delete-env
-      #     token: ${{ secrets.GH_TOKEN }}
-      #     env: ${{ env.STORYBOOK_BRANCH_SLUG }}
+        if: github.event_name == 'pull_request'

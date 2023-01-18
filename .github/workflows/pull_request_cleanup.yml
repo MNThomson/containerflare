@@ -9,10 +9,10 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: Deactivate deployment
+      - name: Delete deployment
         uses: bobheadxi/deployments@v1
         with:
-          step: deactivate-env
+          step: delete-env
           token: ${{ github.token }}
           env: pr-${{ github.event.number }}
           desc: Deployment was pruned
