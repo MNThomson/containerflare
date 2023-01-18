@@ -52,7 +52,7 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: containerflare
           directory: ./dist
-          branch: env.cf_name
+          branch: ${{ env.cf_name }}
         id: publish
 
       - name: Update deployment status
