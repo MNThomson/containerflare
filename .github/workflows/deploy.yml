@@ -18,7 +18,7 @@ jobs:
       deployments: write
       pull-requests: write
     environment:
-      name: ${{ env.env_name }}
+      name: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}', 'pr', github.event.number) || 'prod' }}
       # url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
     # env:
     #   env_url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
