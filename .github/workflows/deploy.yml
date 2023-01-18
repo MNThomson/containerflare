@@ -1,0 +1,89 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+env:
+  env_name: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}', 'pr', github.event.number) || 'prod' }}
+  cf_name: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}', 'pr', github.event.number) || 'main' }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+    environment:
+      name: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}', 'pr', github.event.number) || 'prod' }}
+      url: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev') || 'https://cfcr.dev' }}
+    name: Deploy to Cloudflare Pages
+    steps:
+      - name: Start deployment
+        uses: bobheadxi/deployments@v1
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: ${{ env.env_name }}
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - name: Initialize npm
+        run: npm ci
+
+      - name: Initialize npm
+        run: npm run build
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: containerflare
+          directory: ./dist
+          branch: ${{ env.cf_name }}
+        id: publish
+
+      - name: Update deployment status
+        uses: bobheadxi/deployments@v1
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env: ${{ env.env_name }}
+          env_url: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev') || 'https://cfcr.dev' }}
+          debug: true
+
+      - name: Find PR comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: "preview of this pull request"
+        if: github.event_name == 'pull_request'
+
+      - name: Comment on PR
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.number }}
+          body: |
+            A preview of this pull request is ready!
+            See it at ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev') || 'https://cfcr.dev' }}
+            View the deploy log at https://github.com/MNThomson/containerflare/actions/runs/${{ github.run_id}}
+          edit-mode: replace
+        if: github.event_name == 'pull_request'
