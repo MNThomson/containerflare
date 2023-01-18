@@ -66,24 +66,3 @@ jobs:
           env: ${{ env.env_name }}
           env_url: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev') || 'https://cfcr.dev' }}
           debug: true
-
-      - name: Find PR comment
-        uses: peter-evans/find-comment@v2
-        id: fc
-        with:
-          issue-number: ${{ github.event.number }}
-          comment-author: "github-actions[bot]"
-          body-includes: "preview of this pull request"
-        if: github.event_name == 'pull_request'
-
-      - name: Comment on PR
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.number }}
-          body: |
-            A preview of this pull request is ready!
-            See it at ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev') || 'https://cfcr.dev' }}
-            View the deploy log at https://github.com/MNThomson/containerflare/actions/runs/${{ github.run_id}}
-          edit-mode: replace
-        if: github.event_name == 'pull_request'
