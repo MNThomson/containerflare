@@ -7,6 +7,11 @@ on:
 
 jobs:
   cleanup:
+    permissions:
+      deployments: write
+    environment:
+      name: ${{ format('{0}-{1}', 'pr', github.event.number) }}
+    name: Delete environment
     runs-on: ubuntu-latest
     steps:
       - name: Delete deployment
