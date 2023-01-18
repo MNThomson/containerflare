@@ -19,7 +19,7 @@ jobs:
       pull-requests: write
     environment:
       name: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}', 'pr', github.event.number) || 'prod' }}
-      url: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev' || 'https://cfcr.dev' }}
+      url: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev') || 'https://cfcr.dev' }}
     name: Deploy to Cloudflare Pages
     steps:
       - name: Start deployment
@@ -64,7 +64,7 @@ jobs:
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env: ${{ env.env_name }}
-          env_url: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev' || 'https://cfcr.dev' }}
+          env_url: ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev') || 'https://cfcr.dev' }}
           debug: true
 
       - name: Find PR comment
@@ -83,7 +83,7 @@ jobs:
           issue-number: ${{ github.event.number }}
           body: |
             A preview of this pull request is ready!
-            See it at ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev' || 'https://cfcr.dev' }}
+            See it at ${{ github.ref != 'refs/heads/master' && format('{0}-{1}{2}', 'https://pr', github.event.number, '.containerflare.pages.dev') || 'https://cfcr.dev' }}
             View the deploy log at https://github.com/MNThomson/containerflare/actions/runs/${{ github.run_id}}
           edit-mode: replace
         if: github.event_name == 'pull_request'
