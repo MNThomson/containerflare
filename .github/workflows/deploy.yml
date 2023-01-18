@@ -18,7 +18,7 @@ jobs:
       deployments: write
       pull-requests: write
     environment:
-      name: env.env_name
+      name: ${{ env.env_name }}
       # url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
     # env:
     #   env_url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
@@ -30,7 +30,7 @@ jobs:
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env: env.env_name
+          env: ${{ env.env_name }}
 
       - name: Checkout code
         uses: actions/checkout@v3
@@ -72,7 +72,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env: env.env_name
+          env: ${{ env.env_name }}
           env_url: ${{ github.ref != 'refs/heads/master' && steps.publish.outputs.url || 'https://cfcr.dev' }}
           debug: true
 
