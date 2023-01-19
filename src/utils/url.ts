@@ -2,6 +2,7 @@
 const nameRegex = new RegExp(
   "^[a-z0-9]+([._-][a-z0-9]+)*(/[a-z0-9]+([._-][a-z0-9]+)*)*$"
 );
+//TODO: Investigate sha512
 const referenceRegex = new RegExp(
   "^(sha256:)?([a-zA-Z0-9_][a-zA-Z0-9._-]{0,127})$"
 );

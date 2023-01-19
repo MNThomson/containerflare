@@ -6,8 +6,8 @@ import type {
 
 import type { Env, RequestParams } from "@types/bindings";
 
-import { errorNoData } from "@utils/response";
-import { parseParams } from "@utils/url";
+import { errorNoData } from "../../../../../utils/response";
+import { parseParams } from "../../../../../utils/url";
 
 export const onRequest: PagesFunction<Env> = async (
   context: EventContext<Env, RequestParams, {}>
