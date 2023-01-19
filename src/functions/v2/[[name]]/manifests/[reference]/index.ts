@@ -1,4 +1,4 @@
-import {
+import type {
   EventContext,
   PagesFunction,
   Response,
@@ -6,8 +6,8 @@ import {
 
 import type { Env, RequestParams } from "@types/bindings";
 
-import { errorNoData } from "@utils/response";
-import { parseParams } from "@utils/url";
+import { errorNoData } from "../../../../../utils/response";
+import { parseParams } from "../../../../../utils/url";
 
 export const onRequest: PagesFunction<Env> = async (
   context: EventContext<Env, RequestParams, {}>
@@ -19,8 +19,9 @@ export const onRequest: PagesFunction<Env> = async (
 
   // DB Query
   let dbKey: string;
+  //TODO: Investigate sha512
   if (reference.includes("sha256")) {
-    dbKey = reference.replace("sha256:", "");
+    dbKey = reference;
   } else {
     dbKey = name + "/" + reference;
   }
@@ -41,6 +42,7 @@ export const onRequest: PagesFunction<Env> = async (
 
   // Set docker-content-digest header
   let shaTag = reference;
+  //TODO: Investigate sha512
   if (!reference.includes("sha256")) {
     shaTag = data;
   }
