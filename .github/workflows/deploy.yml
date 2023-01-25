@@ -67,4 +67,3 @@ jobs:
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env: ${{ env.env_name }}
           env_url: ${{ env.env_url }}
-          debug: true
