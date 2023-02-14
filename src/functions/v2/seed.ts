@@ -1,3 +1,4 @@
+import { Response } from "@cloudflare/workers-types";
 import type { EventContext, PagesFunction } from "@cloudflare/workers-types";
 
 import type { Env } from "@types/bindings";

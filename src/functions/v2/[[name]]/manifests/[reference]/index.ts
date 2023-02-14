@@ -1,4 +1,8 @@
-import type { EventContext, PagesFunction } from "@cloudflare/workers-types";
+import {
+  type EventContext,
+  type PagesFunction,
+  Response,
+} from "@cloudflare/workers-types";
 
 import type { Env, RequestParams } from "@types/bindings";
 
@@ -9,7 +13,7 @@ export const onRequest: PagesFunction<Env> = async (
   context: EventContext<Env, RequestParams, {}>
 ) => {
   const { name, reference, error } = parseParams(context.params);
-  if (error) {
+  if (error != null) {
     return error;
   }
 
@@ -22,7 +26,7 @@ export const onRequest: PagesFunction<Env> = async (
   }
 
   // Potential for readable stream and no waiting
-  let data = await context.env.containerFlareKV.get(dbKey);
+  const data = await context.env.containerFlareKV.get(dbKey);
   if (!data) {
     return errorNoData();
   }
@@ -33,7 +37,7 @@ export const onRequest: PagesFunction<Env> = async (
     body = data;
   }
 
-  let resp = new Response(body);
+  const resp = new Response(body);
 
   // Set docker-content-digest header
   let shaTag = reference;
