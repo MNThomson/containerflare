@@ -1,8 +1,4 @@
-import {
-  EventContext,
-  PagesFunction,
-  Response,
-} from "@cloudflare/workers-types";
+import type { EventContext, PagesFunction } from "@cloudflare/workers-types";
 
 import type { Env, RequestParams } from "@types/bindings";
 
@@ -17,7 +13,7 @@ export const onRequest: PagesFunction<Env> = async (
     return error;
   }
 
-  let response: Response;
+  let response: typeof Response;
 
   // DB Query
   const data = await context.env.containerFlareR2.get(reference);

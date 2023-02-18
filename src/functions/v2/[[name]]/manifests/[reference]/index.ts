@@ -1,8 +1,4 @@
-import {
-  EventContext,
-  PagesFunction,
-  Response,
-} from "@cloudflare/workers-types";
+import type { EventContext, PagesFunction } from "@cloudflare/workers-types";
 
 import type { Env, RequestParams } from "@types/bindings";
 
