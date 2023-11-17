@@ -1,3 +1,4 @@
+import { Response } from "@cloudflare/workers-types";
 import type { EventContext, PagesFunction } from "@cloudflare/workers-types";
 
 import type { Env } from "@types/bindings";
@@ -94,7 +95,7 @@ async function seedR2(env: Env) {
 }
 
 export const onRequestGet: PagesFunction<Env> = async (
-  context: EventContext<Env, "", {}>
+  context: EventContext<Env, "", Record<string, unknown>>
 ) => {
   if (context.env.ENVIRONMENT !== "development") {
     return new Response("", { status: 404 });

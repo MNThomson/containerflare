@@ -1,10 +1,8 @@
 // Regex from https://github.com/opencontainers/distribution-spec/blob/main/spec.md#pulling-manifests
 const nameRegex = new RegExp(
-  "^[a-z0-9]+([._-][a-z0-9]+)*(/[a-z0-9]+([._-][a-z0-9]+)*)*$"
+  "^[a-z\\d]+([._-][a-z\\d]+)*(/[a-z\\d]+([._-][a-z\\d]+)*)*$"
 );
-const referenceRegex = new RegExp(
-  "^(sha256:)?([a-zA-Z0-9_][a-zA-Z0-9._-]{0,127})$"
-);
+const referenceRegex = new RegExp("^(sha256:)?(\\w[\\w.-]{0,127})$");
 
 function parseParams(params: Record<string, string | string[]>): {
   name: string;
@@ -24,8 +22,8 @@ function parseParams(params: Record<string, string | string[]>): {
     }
 
     return {
-      name: name,
-      reference: reference,
+      name,
+      reference,
       error:
         error.length == 0
           ? null
