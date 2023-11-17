@@ -1,6 +1,6 @@
 // Regex from https://github.com/opencontainers/distribution-spec/blob/main/spec.md#pulling-manifests
 const nameRegex = new RegExp(
-  "^[a-z\\d]+([._-][a-z\\d]+)*(/[a-z\\d]+([._-][a-z\\d]+)*)*$"
+  "^[a-z\\d]+([._-][a-z\\d]+)*(/[a-z\\d]+([._-][a-z\\d]+)*)*$",
 );
 const referenceRegex = new RegExp("^(sha256:)?(\\w[\\w.-]{0,127})$");
 
@@ -10,8 +10,8 @@ function parseParams(params: Record<string, string | undefined>): {
   error: Response | null;
 } {
   try {
-    if (!params) throw new Error;
-    const name = params.name
+    if (!params) throw new Error();
+    const name = params.name;
     const reference = params.reference as string;
 
     let error = "";
@@ -34,7 +34,7 @@ function parseParams(params: Record<string, string | undefined>): {
                 "message": "Bad Params",
                 "detail": "${error}"
               }]}`,
-              { status: 404 }
+              { status: 404 },
             ),
     };
   } catch (error) {
@@ -48,7 +48,7 @@ function parseParams(params: Record<string, string | undefined>): {
           "message": "Bad Params",
           "detail": "Bad Params"
         }]}`,
-        { status: 404 }
+        { status: 404 },
       ),
     };
   }

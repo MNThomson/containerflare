@@ -8,6 +8,6 @@ export default defineConfig({
   output: "server",
   adapter: cloudflare({
     mode: "directory",
-    runtime: { mode: 'local', persistTo: '.wrangler/state/v3' }
+    runtime: { mode: "local", persistTo: ".wrangler/state/v3" },
   }),
 });

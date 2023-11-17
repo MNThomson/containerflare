@@ -20,4 +20,4 @@ export async function GET(context: APIContext) {
   }
 
   return response;
-};
+}

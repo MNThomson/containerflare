@@ -46,4 +46,4 @@ export async function GET(context: APIContext) {
   resp.headers.set("Content-Length", data.length.toString());
 
   return resp;
-};
+}

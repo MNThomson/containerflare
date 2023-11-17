@@ -4,7 +4,7 @@ let authHeader: string;
 
 async function getAuth() {
   const resp = await fetch(
-    "https://auth.docker.io/token?scope=repository%3Alibrary%2Fhello-world%3Apull&service=registry.docker.io"
+    "https://auth.docker.io/token?scope=repository%3Alibrary%2Fhello-world%3Apull&service=registry.docker.io",
   );
   return "Bearer " + ((await resp.json()) as Record<string, string>).token;
 }
@@ -19,7 +19,7 @@ async function seedTag(env: Env, tag: string) {
         Authorization: authHeader,
         Accept: "application/vnd.docker.distribution.manifest.list.v2+json",
       },
-    }
+    },
   );
 
   if (label_req.status != 200) {
@@ -45,7 +45,7 @@ async function seedOS(env: Env, hash: string) {
         Authorization: authHeader,
         Accept: "application/vnd.docker.distribution.manifest.list.v2+json",
       },
-    }
+    },
   );
 
   if (label_req.status != 200) {
@@ -72,7 +72,7 @@ async function seedImage(env: Env, hash: string) {
         Authorization: authHeader,
         Accept: "application/vnd.docker.distribution.manifest.v2+json",
       },
-    }
+    },
   );
 
   if (label_req.status != 200) {
@@ -97,7 +97,7 @@ async function seedBlob(env: Env, hash: string) {
       headers: {
         Authorization: authHeader,
       },
-    }
+    },
   );
 
   if (req.status != 200) {
@@ -118,4 +118,4 @@ export const GET: APIRoute = async (context) => {
   console.log("DONE Seeding");
 
   return new Response("DONE");
-}
+};

@@ -9,9 +9,11 @@ type ENV = {
 
 declare namespace App {
   interface Locals extends DirectoryRuntime {
-    runtime: DirectoryRuntime & { env: { 
-      kv: KVNamespace;
-      r2: R2Bucket;
-     } };
+    runtime: DirectoryRuntime & {
+      env: {
+        kv: KVNamespace;
+        r2: R2Bucket;
+      };
+    };
   }
 }
