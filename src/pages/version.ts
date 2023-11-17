@@ -1,6 +1,6 @@
 export const prerender = true;
 
-export async function get() {
+export function get(): Record<string, string> {
   return {
     body: import.meta.env.PUBLIC_GIT_SHA,
   };

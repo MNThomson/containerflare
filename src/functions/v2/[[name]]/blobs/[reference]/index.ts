@@ -10,7 +10,7 @@ import { errorNoData } from "@utils/response";
 import { parseParams } from "@utils/url";
 
 export const onRequest: PagesFunction<Env> = async (
-  context: EventContext<Env, RequestParams, {}>
+  context: EventContext<Env, RequestParams, Record<string, unknown>>
 ) => {
   const { reference, error } = parseParams(context.params);
   if (error != null) {
