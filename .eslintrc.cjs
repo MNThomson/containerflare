@@ -16,7 +16,7 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     tsconfigRootDir: __dirname,
-    project: ["./tsconfig.base.json", "./src/tsconfig.json"],
+    project: ["./tsconfig.json"],
   },
   plugins: ["@typescript-eslint", "prettier", "sonarjs", "regexp", "mocha"],
   overrides: [
@@ -25,12 +25,6 @@ module.exports = {
       parser: "astro-eslint-parser",
       parserOptions: {
         extraFileExtensions: [".astro"],
-      },
-    },
-    {
-      files: ["src/functions/**/*.ts"],
-      parserOptions: {
-        project: ["./tsconfig.base.json", "./src/functions/tsconfig.json"],
       },
     },
   ],
