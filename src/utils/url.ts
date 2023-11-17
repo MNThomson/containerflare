@@ -2,9 +2,7 @@
 const nameRegex = new RegExp(
   "^[a-z\\d]+([._-][a-z\\d]+)*(/[a-z\\d]+([._-][a-z\\d]+)*)*$"
 );
-const referenceRegex = new RegExp(
-  "^(sha256:)?(\\w[\\w.-]{0,127})$"
-);
+const referenceRegex = new RegExp("^(sha256:)?(\\w[\\w.-]{0,127})$");
 
 function parseParams(params: Record<string, string | string[]>): {
   name: string;
