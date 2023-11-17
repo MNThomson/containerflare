@@ -108,9 +108,9 @@ async function seedBlob(env: Env, hash: string) {
 }
 
 export const GET: APIRoute = async (context) => {
-  if (!import.meta.env.DEV) {
-    return new Response("", { status: 404 });
-  }
+  // if (!import.meta.env.DEV) {
+  //   return new Response("", { status: 404 });
+  // }
 
   console.log("Seeding...");
   authHeader = await getAuth();
