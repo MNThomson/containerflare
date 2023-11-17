@@ -4,13 +4,14 @@ const nameRegex = new RegExp(
 );
 const referenceRegex = new RegExp("^(sha256:)?(\\w[\\w.-]{0,127})$");
 
-function parseParams(params: Record<string, string | string[]>): {
+function parseParams(params: Record<string, string | undefined>): {
   name: string;
   reference: string;
   error: Response | null;
 } {
   try {
-    const name = (params.name as string[]).join("/");
+    if (!params) throw new Error;
+    const name = params.name
     const reference = params.reference as string;
 
     let error = "";
