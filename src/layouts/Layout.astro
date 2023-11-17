@@ -4,8 +4,6 @@ export interface Props {
 }
 
 const { title } = Astro.props;
-
-const PUBLIC_GIT_SHA = import.meta.env.PUBLIC_GIT_SHA;
 ---
 
 <!DOCTYPE html>
@@ -19,7 +17,7 @@ const PUBLIC_GIT_SHA = import.meta.env.PUBLIC_GIT_SHA;
       name="description"
       content="The Globally Distributed, Edge Container Registry"
     />
-    <meta name="version" content={PUBLIC_GIT_SHA} />
+    <!-- <meta name="version" content={PUBLIC_GIT_SHA} /> -->
     <meta name="application-name" content="cfcr.dev" />
     <meta name="author" content="MNThomson" />
 

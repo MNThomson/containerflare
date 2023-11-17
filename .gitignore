@@ -6,7 +6,10 @@
 # build output
 dist/
 .output/
+.mf
+.wrangler
 functions/\[\[path\]\].js
+
 
 # dependencies
 node_modules/

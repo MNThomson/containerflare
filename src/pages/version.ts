@@ -1,7 +1,6 @@
 export const prerender = true;
 
-export function get(): Record<string, string> {
-  return {
-    body: import.meta.env.PUBLIC_GIT_SHA,
-  };
-}
+export const GET: APIRoute = async () => {
+  // return new Response(import.meta.env.PUBLIC_GIT_SHA);
+  return new Response("todo!()");
+};

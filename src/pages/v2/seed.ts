@@ -1,13 +1,10 @@
-import { Response } from "@cloudflare/workers-types";
-import type { EventContext, PagesFunction } from "@cloudflare/workers-types";
-
-import type { Env } from "@types/bindings";
+// import type { Env} from "../../../env.d.ts"
 
 let authHeader: string;
 
 async function getAuth() {
   const resp = await fetch(
-    "https://auth.docker.io/token?scope=repository%3Alibrary%2Fhello-world%3Apull&service=registry.docker.io"
+    "https://auth.docker.io/token?scope=repository%3Alibrary%2Fhello-world%3Apull&service=registry.docker.io",
   );
   return "Bearer " + ((await resp.json()) as Record<string, string>).token;
 }
@@ -22,7 +19,7 @@ async function seedTag(env: Env, tag: string) {
         Authorization: authHeader,
         Accept: "application/vnd.docker.distribution.manifest.list.v2+json",
       },
-    }
+    },
   );
 
   if (label_req.status != 200) {
@@ -33,7 +30,7 @@ async function seedTag(env: Env, tag: string) {
   console.log(await label_req.text());
 
   const sha_hash = await label_req.headers.get("docker-content-digest")!;
-  await env.containerFlareKV.put(tag, sha_hash);
+  await env.kv.put(tag, sha_hash);
   console.log(sha_hash);
   seedOS(env, sha_hash);
 }
@@ -48,7 +45,7 @@ async function seedOS(env: Env, hash: string) {
         Authorization: authHeader,
         Accept: "application/vnd.docker.distribution.manifest.list.v2+json",
       },
-    }
+    },
   );
 
   if (label_req.status != 200) {
@@ -57,7 +54,7 @@ async function seedOS(env: Env, hash: string) {
   }
 
   const os_list = await label_req.text();
-  await env.containerFlareKV.put(hash, os_list);
+  await env.kv.put(hash, os_list);
   const os_json = JSON.parse(os_list) as Record<any, any>;
 
   for (var key in os_json.manifests) {
@@ -75,7 +72,7 @@ async function seedImage(env: Env, hash: string) {
         Authorization: authHeader,
         Accept: "application/vnd.docker.distribution.manifest.v2+json",
       },
-    }
+    },
   );
 
   if (label_req.status != 200) {
@@ -84,7 +81,7 @@ async function seedImage(env: Env, hash: string) {
   }
 
   const os_list = await label_req.text();
-  await env.containerFlareKV.put(hash, os_list);
+  await env.kv.put(hash, os_list);
   const image_json = JSON.parse(os_list) as Record<any, any>;
 
   seedBlob(env, image_json.config.digest);
@@ -100,21 +97,25 @@ async function seedBlob(env: Env, hash: string) {
       headers: {
         Authorization: authHeader,
       },
-    }
+    },
   );
 
   if (req.status != 200) {
     console.error("Seed not 200", req.statusText);
   }
 
-  await env.containerFlareR2.put(hash, await req.arrayBuffer());
+  await env.r2.put(hash, await req.arrayBuffer());
 }
 
-async function seed(env: Env, tag: string) {
+export const GET: APIRoute = async (context) => {
+  if (!import.meta.env.DEV) {
+    return new Response("", { status: 404 });
+  }
+
   console.log("Seeding...");
   authHeader = await getAuth();
-  await seedTag(env, tag);
+  await seedTag(context.locals?.runtime?.env, "hello-world:latest");
   console.log("DONE Seeding");
-}
 
-export default seed;
+  return new Response("DONE");
+};

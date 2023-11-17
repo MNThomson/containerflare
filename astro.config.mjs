@@ -6,5 +6,8 @@ export default defineConfig({
   publicDir: "./src/public",
   site: `https://cfcr.dev`,
   output: "server",
-  adapter: cloudflare({ mode: "directory" }),
+  adapter: cloudflare({
+    mode: "directory",
+    runtime: { mode: "local", persistTo: ".wrangler/state/v3" },
+  }),
 });

@@ -1,32 +1,20 @@
-import {
-  type EventContext,
-  type PagesFunction,
-  Response,
-} from "@cloudflare/workers-types";
-
-import type { Env, RequestParams } from "@types/bindings";
-
 import { errorNoData } from "@utils/response";
 import { parseParams } from "@utils/url";
+import type { APIContext } from "astro";
 
-export const onRequest: PagesFunction<Env> = async (
-  context: EventContext<Env, RequestParams, Record<string, unknown>>
-) => {
-  const { name, reference, error } = parseParams(context.params);
-  if (error != null) {
-    return error;
-  }
+export async function GET(context: APIContext) {
+  const { name, reference } = parseParams(context.params);
 
   // DB Query
   let dbKey: string;
   if (reference.includes("sha256")) {
-    dbKey = reference.replace("sha256:", "");
+    dbKey = reference;
   } else {
     dbKey = name + "/" + reference;
   }
 
   // Potential for readable stream and no waiting
-  const data = await context.env.containerFlareKV.get(dbKey);
+  const data = await context.locals?.runtime?.env.kv.get(dbKey);
   if (!data) {
     return errorNoData();
   }
@@ -58,4 +46,4 @@ export const onRequest: PagesFunction<Env> = async (
   resp.headers.set("Content-Length", data.length.toString());
 
   return resp;
-};
+}
