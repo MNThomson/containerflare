@@ -24,28 +24,28 @@
     "burp": "sudo nano /etc/systemd/system/docker.service.d/http-proxy.conf && sudo systemctl daemon-reload && sudo systemctl restart docker"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^6.0.0",
-    "astro": "^2.0.0"
+    "@astrojs/cloudflare": "^7.7.1",
+    "astro": "^3.5.5"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20221111.1",
-    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.52.0",
-    "@typescript-eslint/parser": "^5.52.0",
-    "eslint": "^8.34.0",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-config-standard-with-typescript": "^34.0.0",
+    "@cloudflare/workers-types": "^4.20231025.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.53.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard-with-typescript": "^39.1.1",
     "eslint-dashboard": "^0.1.1",
-    "eslint-plugin-astro": "^0.23.0",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-mocha": "^10.1.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-regexp": "^1.12.0",
-    "eslint-plugin-sonarjs": "^0.18.0",
-    "eslint-plugin-tailwindcss": "^3.8.3",
-    "prettier": "^2.8.3",
-    "prettier-plugin-astro": "^0.8.0",
-    "typescript": "^4.9.5",
-    "wrangler": "^2.9.0"
+    "eslint-plugin-astro": "^0.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-mocha": "^10.2.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-regexp": "^2.1.1",
+    "eslint-plugin-sonarjs": "^0.23.0",
+    "eslint-plugin-tailwindcss": "^3.13.0",
+    "prettier": "^3.1.0",
+    "prettier-plugin-astro": "^0.12.2",
+    "typescript": "^5.2.2",
+    "wrangler": "^3.16.0"
   }
 }
