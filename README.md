@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD033 MD013 -->
 <h1 align="center">
     <a href="https://github.com/MNThomson/containerflare">
-        <img src=src/public/favicon.svg alt="Containerflare Logo" width="200">
+        <img src="src/public/favicon.svg" alt="Containerflare Logo" width="100">
     </a>
     <br>
         ContainerFlare
